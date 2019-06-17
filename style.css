@@ -152,3 +152,8 @@ body {
   background: #27AE60;
   color: white;
 }
+
+canvas{
+  border:1px solid #b18383;
+  background-color: black;
+}

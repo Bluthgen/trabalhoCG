@@ -1,19 +1,55 @@
 
+function desenhaPonto(ponto){
+  var pointSize = 3; // Change according to the size of the point.
+  var ctx = document.getElementById("canvas").getContext("2d");
+
+
+  ctx.fillStyle = "#ffffff"; // White color
+
+  ctx.beginPath(); //Start path
+  ctx.arc(ponto.x, ponto.y, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+  ctx.fill(); // Close the path and fill.
+}
+
+function desenhaLinha(ponto1, ponto2){
+  var ctx = document.getElementById("canvas").getContext("2d")
+  
+  ctx.strokeStyle = "#ffffff";
+
+  ctx.moveTo(ponto1.x, ponto1.y);
+  ctx.lineTo(ponto2.x, ponto2.y);
+  ctx.stroke();
+}
+
+/* function getPosition(event){
+  var rect = canvas.getBoundingClientRect();
+  var x = event.clientX - rect.left; // x == the location of the click in the document - the location (relative to the left) of the canvas in the document
+  var y = event.clientY - rect.top; // y == the location of the click in the document - the location (relative to the top) of the canvas in the document
+  
+  // This method will handle the coordinates and will draw them in the canvas.
+  desenhaPonto(x,y);
+  console.log(x, y)
+}
+
+$("#canvas").click(function(e){
+  getPosition(e)
+}) */
+
 function calculaNormal(ponto1, ponto2, ponto3){
-    let nx= ((ponto1.y - ponto2.y) * (ponto3.z - ponto2.z)) - ((ponto3.y - ponto2.y) * (ponto1.z - ponto2.z))
-    let ny= -1 * ((ponto1.x - ponto2.x) * (ponto3.z - ponto2.z)) - ((ponto3.x - ponto2.x) * (ponto1.z - ponto2.z))
-    let nz= ((ponto1.x - ponto2.x) * (ponto3.y - ponto2.y)) - ((ponto3.x - ponto2.x) * (ponto1.y - ponto2.y))
+    let nx= ((ponto1.y - ponto2.y) * (ponto3.z - ponto2.z)) - ((ponto3.y - ponto2.y) * (ponto1.z - ponto2.z));
+    let ny= -1 * ((ponto1.x - ponto2.x) * (ponto3.z - ponto2.z)) - ((ponto3.x - ponto2.x) * (ponto1.z - ponto2.z));
+    let nz= ((ponto1.x - ponto2.x) * (ponto3.y - ponto2.y)) - ((ponto3.x - ponto2.x) * (ponto1.y - ponto2.y));
     return {
       x: nx,
       y: ny,
       z: nz
     }
   }
-  
+
   function calculaDs(ponto, normal, centro) {
-    let d0 = ponto.x * normal.x + ponto.y * normal.y + ponto.z * normal.z
-    let d1 = centro.x * normal.x + centro.y * normal.y + centro.z * normal.z
-    let d = d0 - d1
+    let d0 = ponto.x * normal.x + ponto.y * normal.y + ponto.z * normal.z;
+    let d1 = centro.x * normal.x + centro.y * normal.y + centro.z * normal.z;
+    let d = d0 - d1;
     return {
       d0: d0,
       d1: d1,
@@ -37,55 +73,79 @@ function calculaNormal(ponto1, ponto2, ponto3){
   }
   
   function montaMatrizPerspectivaCone(normal, centro, ds){
-      m= [[ds.d + centro.x * normal.x, centro.x * normal.y, centro.x * normal.z, -1 * centro.x * ds.d0], [centro.y * normal.x, ds.d + centro.y * normal.y, centro.y * normal.z, -1 * centro.y * ds.d0], [centro.z * normal.x, centro.z * normal.y, ds.d + centro.z * normal.z, -1 * centro.z * ds.d0], [normal.x, normal.y, normal.z, -1* ds.d1]]
-    return m
+    m= [[ds.d + centro.x * normal.x, centro.x * normal.y, centro.x * normal.z, -1 * centro.x * ds.d0], [centro.y * normal.x, ds.d + centro.y * normal.y, centro.y * normal.z, -1 * centro.y * ds.d0], [centro.z * normal.x, centro.z * normal.y, ds.d + centro.z * normal.z, -1 * centro.z * ds.d0], [normal.x, normal.y, normal.z, -1* ds.d1]];
+    return m;
   }
   
   function montaMatrizPerspectivaCilindro(normal, centro, ds){
-      m= [[ds.d - centro.x * normal.x, -1 * centro.x * normal.y, -1 * centro.x * normal.z, centro.x * ds.d0], [-1 * centro.y * normal.x, ds.d - centro.y * normal.y, -1 * centro.y * normal.z, centro.y * ds.d0], [-1 * centro.z * normal.x, -1 * centro.z * normal.y, ds.d - centro.z * normal.z, centro.z * ds.d0], [0, 0, 0, ds.d1]]
-    return m
+    m= [[ds.d - centro.x * normal.x, -1 * centro.x * normal.y, -1 * centro.x * normal.z, centro.x * ds.d0], [-1 * centro.y * normal.x, ds.d - centro.y * normal.y, -1 * centro.y * normal.z, centro.y * ds.d0], [-1 * centro.z * normal.x, -1 * centro.z * normal.y, ds.d - centro.z * normal.z, centro.z * ds.d0], [0, 0, 0, ds.d1]];
+    return m;
   }
   
   function calculoP(mp, objeto, tjv){
-      let ph= multiplyMatrices(mp, objeto)
-      let xc= ph[0][0]/ph[3][0]
-    let yc= ph[1][0]/ph[3][0]
-    let zc= ph[2][0]/ph[3][0]
-    let wc= 1
-      let temp= [[xc], [yc], [zc]]
-    return multiplyMatrices(tjv, temp)
+    let ph= multiplyMatrices(mp, objeto);
+    let xc= ph[0][0]/ph[3][0];
+    let yc= ph[1][0]/ph[3][0];
+    let zc= ph[2][0]/ph[3][0];
+    let wc= 1;
+    let temp= [[xc], [yc], [zc]];
+    return multiplyMatrices(tjv, temp);
   }
   
   function janelaViewport(janela, viewport){
-      let Sx= (viewport.umax - viewport.umin)/(janela.xmax - janela.xmin)
-    let Sy= (viewport.vmax - viewport.vmin)/(janela.ymax - janela.ymin)
-    let matrizparcial= [[Sx, 0, viewport.umin - Sx*janela.xmin], [0, -1 * Sy, viewport.vmin - Sy*janela.ymin], [0, 0, 1]]
+    let Sx= (viewport.umax - viewport.umin)/(janela.xmax - janela.xmin);
+    let Sy= (viewport.vmax - viewport.vmin)/(janela.ymax - janela.ymin);
+    let matrizparcial= [[Sx, 0, viewport.umin - Sx*janela.xmin], [0, -1 * Sy, viewport.vmin - Sy*janela.ymin], [0, 0, 1]];
     
-    rj= (janela.xmax - janela.xmin)/(janela.ymax - janela.ymin)
-    rv= (viewport.umax - viewport.umin)/(viewport.vmax - viewport.vmin)
+    rj= (janela.xmax - janela.xmin)/(janela.ymax - janela.ymin);
+    rv= (viewport.umax - viewport.umin)/(viewport.vmax - viewport.vmin);
     
-    let matrizFinal
+    let matrizFinal;
     if(rj > rv){
-        let vmaxnovo= (viewport.umax- viewport.umin)/rj + viewport.vmin
-      let mat1= [[1, 0, 0],[0, 1, (viewport.vmax - vmaxnovo)/2], [0, 0, 1]]
-          matrizFinal= multiplyMatrices(matrizparcial, mat1)
+      let vmaxnovo= (viewport.umax- viewport.umin)/rj + viewport.vmin;
+      let mat1= [[1, 0, 0],[0, 1, (viewport.vmax - vmaxnovo)/2], [0, 0, 1]];
+      matrizFinal= multiplyMatrices(matrizparcial, mat1);
     }else{
-        let umaxnovo= rj*(viewport.vmax - viewport.vmin) + viewport.umin
-          let mat1= [[1, 0, viewport.umax - umaxnovo], [0, 1, 0], [0, 0, 1]]
-      matrizFinal= multiplyMatrices(matrizparcial, mat1)
+      let umaxnovo= rj*(viewport.vmax - viewport.vmin) + viewport.umin;
+      let mat1= [[1, 0, viewport.umax - umaxnovo], [0, 1, 0], [0, 0, 1]];
+      matrizFinal= multiplyMatrices(matrizparcial, mat1);
     }
     
     return matrizFinal
   }
 
+  function mostrar(cilindrica, pPlano1, pPlano2, pPlano3, centro, objeto){
+    let normal= calculaNormal(pPlano1, pPlano2, pPlano3);
+    let ds= calculaDs(pPlano1, normal, centro);
+    let mp;
+    if(cilindrica){
+      mp= montaMatrizPerspectivaCilindro(normal, centro, ds);
+    }else{
+      mp= montaMatrizPerspectivaCone(normal, centro, ds);
+    }
+    let canvas= document.getElementById("canvas")
+    let tjv= janelaViewport({xmin: 0, xmax: 1000, ymin: 0, ymax: 600}, {umin: 0, umax: canvas.width, vmin: 0, vmax: canvas.heigth})
+    let p= calculoP(mp, objeto, tjv)
+    for(var i= 0; i < p.length; i++){
+      for(var j= 0; j<p[i].length; j++){
+        desenhaPonto(p[i][j])
+      }
+    }
+  }
 
-  var current_fs, next_fs, previous_fs;
-  var left, opacity, scale;
-  var animating;
-  var fi = true;
-  var tamVL = 0;
-  var tamSL = 0;
-  var ab=true,bc=true,cd=true,de=true;
+  let current_fs, next_fs, previous_fs;
+  let left, opacity, scale;
+  let animating;
+  let fi = true;
+  let tamVL = 0;
+  let tamSL = 0;
+  let ab=true,bc=true,cd=true,de=true;
+  let cilindrica;
+  let pPlano1;
+  let pPlano2;
+  let pPlano3;
+  let centro;
+  let objeto;
   
   
   //animação para o proximo fieldset
@@ -274,7 +334,9 @@ function calculaNormal(ponto1, ponto2, ponto3){
         $(".fieldset2").attr("disabled", false);
       $("#erroCC").hide();
     }
-    
+    pPonto1= {x: P1x, y: P1y, z: P1z}
+    pPonto2= {x: P2x, y: P2y, z: P2z}
+    pPonto1= {x: P3x, y: P3y, z: P3z}
     }
   });
   
@@ -449,5 +511,6 @@ function calculaNormal(ponto1, ponto2, ponto3){
   //botao de submit
   $(".submit").click(function() {
       alert( "Tudo Ok" );
+      mostrar();
     return false;
   })
