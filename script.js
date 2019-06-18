@@ -19,6 +19,9 @@
   $("#erroC").hide();
   $(".hideS").hide();
   $("#erroCC").hide();
+  $("[name=nextS1]").hide();
+  $("[name=nextS2]").hide();
+  $("[name=nextS3]").hide();
 
 function desenhaPonto(ponto){
   var pointSize = 3; // Change according to the size of the point.
@@ -302,8 +305,10 @@ function calculaNormal(){
   $(".numF").on("input",function() {
     if($('[name=x]').val() == "" || $('[name=y]').val() == "" || $('[name=z]').val() == ""){
           $(".fieldset1").attr("disabled", true);
+		  $("[name=nextS1]").attr("disabled", true);
     } else{
         $(".fieldset1").attr("disabled", false);
+		$("[name=nextS1]").attr("disabled", false);
     }
   });
   
@@ -314,6 +319,7 @@ function calculaNormal(){
         $(".hideS").show();
       $("#erroCC").show();
       $(".fieldset2").attr("disabled", true);
+	  $("[name=nextS2]").attr("disabled", true);
     }else{
     $(".hideS").hide();
     $("#erroCC").hide();
@@ -328,13 +334,16 @@ function calculaNormal(){
   var P3z = $('[name=P3z]').val();
     if(P1x == "" || P1y == "" || P1z == "" || P2x == "" || P2y == "" || P2z == "" || P3x == "" || P3y == "" || P3z == ""){
           $(".fieldset2").attr("disabled", true);
+		  $("[name=nextS2]").attr("disabled", true);
     }
     else if((P1x - P2x)*(P1y - P3y) == (P1y - P2y)*(P1x - P3x) || (P1x - P2x)*(P1z - P3z) == (P1z - P2z)*(P1x - P3x) || (P1y - P2y)*(P1z - P3z) == (P1z - P2z)*(P1y - P3y)) {
         $(".fieldset2").attr("disabled", true);
+		$("[name=nextS2]").attr("disabled", true);
       $("#erroC").show();
     }
     else{
         $(".fieldset2").attr("disabled", false);
+		$("[name=nextS2]").attr("disabled", false);
       $("#erroC").hide();
     }
   }
@@ -355,13 +364,16 @@ function calculaNormal(){
   var P3z = $('[name=P3z]').val();
     if(P1x == "" || P1y == "" || P1z == "" || P2x == "" || P2y == "" || P2z == "" || P3x == "" || P3y == "" || P3z == ""){
           $(".fieldset2").attr("disabled", true);
+		  $("[name=nextS2]").attr("disabled", true);
       block = true;
     }
     else if((P1x - P2x)*(P1y - P3y) == (P1y - P2y)*(P1x - P3x) || (P1x - P2x)*(P1z - P3z) == (P1z - P2z)*(P1x - P3x) || (P1y - P2y)*(P1z - P3z) == (P1z - P2z)*(P1y - P3y)) {
         $(".fieldset2").attr("disabled", true);
+		$("[name=nextS2]").attr("disabled", true);
       $("#erroC").show();
     }else{
         $(".fieldset2").attr("disabled", false);
+		$("[name=nextS2]").attr("disabled", false);
       $("#erroC").hide();
      }
     
@@ -371,6 +383,7 @@ function calculaNormal(){
       var Rz = $('[name=Rz]').val();
     if(Rx == "" || Ry == "" || Rz == ""){
         $(".fieldset2").attr("disabled", true);
+		$("[name=nextS2]").attr("disabled", true);
       $("#erroCC").show();
       return;
     }
@@ -389,10 +402,12 @@ function calculaNormal(){
     var d = -(ni*P3x + nj*P3y + nk*P3z)
     if(Math.abs(ni*Rx+nj*Ry+nk*Rz+d)/Math.sqrt(Math.pow(ni,2) + Math.pow(nj,2) + Math.pow(nk,2)) != 0){
     $(".fieldset2").attr("disabled", true);
+	$("[name=nextS2]").attr("disabled", true);
       $("#erroCC").show();
     }
     else{
         $(".fieldset2").attr("disabled", false);
+		$("[name=nextS2]").attr("disabled", false);
       $("#erroCC").hide();
     }
     }
@@ -561,8 +576,10 @@ function calculaNormal(){
   function libera(){
       if(ab|bc|cd|de){
           $(".submit").attr("disabled", true);
+		  $("[name=nextS3]").attr("disabled", true);
       }else{
           $(".submit").attr("disabled", false);
+		  $("[name=nextS3]").attr("disabled", false);
       }
   }
   
@@ -573,6 +590,79 @@ function calculaNormal(){
 	  putValueVerticesAndSuperficies();
 	  $("#progressbar").hide();
 	  $(".especial").hide();
+	  $(".next").hide();
+	  $(".previous").hide();
+	  $(".submit").hide();
 	  $("#canvas").show();
       mostrar();
-  })
+  });
+  
+  //mostra novamente a primeira tela
+  function mostrarNovamentePrimeiraTela(){
+	  $(".etapa1").show();
+	  $("[name=nextS1]").show();
+	  $(".etapa1").animate({
+      opacity: 100
+    }, {
+      step: function(now, mx) {
+        $(".etapa1").css({
+          'transform': 'scale(' + scale + ')',
+          'opacity': opacity
+        });
+      },
+      easing: 'easeInOutBack'
+    });
+  }
+  
+  function mostrarNovamenteSegundaTela(){
+	  $(".etapa2").show();
+	  $("[name=nextS2]").show();
+	  $(".etapa2").animate({
+      opacity: 100
+    }, {
+      step: function(now, mx) {
+        $(".etapa1").css({
+          'transform': 'scale(' + scale + ')',
+          'opacity': opacity
+        });
+      },
+      easing: 'easeInOutBack'
+    });
+  }
+  
+  function mostrarNovamenteTerceiraTela(){
+	  $(".etapa3").show();
+	  $("[name=nextS3]").show();
+	  $(".etapa3").animate({
+      opacity: 100
+    }, {
+      step: function(now, mx) {
+        $(".etapa1").css({
+          'transform': 'scale(' + scale + ')',
+          'opacity': opacity
+        });
+      },
+      easing: 'easeInOutBack'
+    });
+  }
+  
+  $("[name=nextS1]").click(function() {
+      putValuePontoDeVista()
+	  $(".especial").hide();
+	  $("#canvas").show();
+      mostrar();
+  });
+  
+    $("[name=nextS2]").click(function() {
+      putValuePontoPlano();
+	  $(".especial").hide();
+	  $("#canvas").show();
+      mostrar();
+  });
+  
+    $("[name=nextS3]").click(function() {
+      putValueVerticesAndSuperficies();
+	  $(".especial").hide();
+	  $("#canvas").show();
+      mostrar();
+  });
