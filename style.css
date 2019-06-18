@@ -43,7 +43,7 @@ body {
   position: relative;
 }
 
-#msform fieldset {
+#msform .especial {
   background: white;
   border: 0 none;
   border-radius: 3px;
@@ -55,7 +55,7 @@ body {
   position: relative;
 }
 
-#msform fieldset:not(:first-of-type) {
+#msform .especial:not(:first-of-type) {
   display: none;
 }
 

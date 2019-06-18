@@ -231,7 +231,7 @@ function calculaNormal(){
     next_fs = $(this).parent().next();
   
     //ativa o novo fieldset na barra de progresso
-    $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+    $("#progressbar li").eq($(".especial").index(next_fs)).addClass("active");
   
     next_fs.show();
     current_fs.animate({
@@ -270,7 +270,7 @@ function calculaNormal(){
     previous_fs = $(this).parent().prev();
   
     //volta a barra de progresso
-    $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+    $("#progressbar li").eq($(".especial").index(current_fs)).removeClass("active");
     previous_fs.show();
     current_fs.animate({
       opacity: 0
@@ -571,7 +571,8 @@ function calculaNormal(){
       putValuePontoDeVista()
 	  putValuePontoPlano();
 	  putValueVerticesAndSuperficies();
-	  $("#msform").hide();
+	  $("#progressbar").hide();
+	  $(".especial").hide();
 	  $("#canvas").show();
       mostrar();
   })
