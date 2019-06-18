@@ -1,97 +1,119 @@
 <html>
-  <head>
+<head>
     <meta charset="utf-8" />
-
     <link rel="stylesheet" href="./style.css">
+</head>
+<body>
 
-  </head>
-  <body>
-  
     <!-- multistep form -->
+	
+	<nav class="menu">
+        <ul style="margin: 0; padding: 0;">
+            <button class="menu-submenu">Submenu 1</button>
+                <li class="list">
+                    <select name="opcoes" id="select">
+                        <option value="P1">Os valores de P1</option>
+                        <option value="P2">Os valores de P2</option>
+                        <option value="P3">Os valores de P3</option>
+                        <option value="outro">Outros valores</option>
+                    </select>
+				</li>
+			<button class="menu-submenu">Submenu 2</button>
+				<li class="list">
+                    <select name="opcoes" id="select">
+                        <option value="P1">P1</option>
+                        <option value="P2">P2</option>
+                        <option value="P3">P3</option>
+                        <option value="outro">Outros valores</option>
+                    </select>
+				</li>
+        </ul>
+    </nav>
+	
     <form id="msform">
-      <!-- progressbar -->
-      <ul id="progressbar">
-        <li class="active">Ponto de Vista</li>
-        <li>Plano de Projeção</li>
-        <li>Dados do Objeto</li>
-      </ul>
-      <!-- fieldsets -->
-      <div class="especial etapa1">
-        <h2 class="fs-title">Criando a Cena</h2>
-        <h3 class="fs-subtitle">Selecione o ponto de vista</h3>
-        <input type="number" name="x" class="numF" placeholder="Distância x" />
-        <input type="number" name="y" class="numF" placeholder="Distância y" />
-        <input type="number" name="z" class="numF"  placeholder="Distância z" />
-        <button type="button" name="next" disabled class="next fieldset1 action-button">Próximo</button>
-		<button type="button" name="nextS1" class="action-button">Gerar</button>
-      </div>
-      <div class="especial etapa2">
-        <h2 class="fs-title">Criando a Cena</h2>
-        <h3 class="fs-subtitle">Selecione o plano de projeção</h3>
-        <h4 class="fs-P">Valores de P1</h4>
-        <input type="number" name="P1x" class="numS" placeholder="Distância x" />
-        <input type="number" name="P1y" class="numS" placeholder="Distância y" />
-        <input type="number" name="P1z" class="numS" placeholder="Distância z" />
-        <h4 class="fs-P">Valores de P2</h4>
-        <input type="number" name="P2x" class="numS" placeholder="Distância x" />
-        <input type="number" name="P2y" class="numS" placeholder="Distância y" />
-        <input type="number" name="P2z" class="numS" placeholder="Distância z" />
-        <h4 class="fs-P">Valores de P3</h4>
-        <input type="number" name="P3x" class="numS" placeholder="Distância x" />
-        <input type="number" name="P3y" class="numS" placeholder="Distância y" />
-        <input type="number" name="P3z" class="numS" placeholder="Distância z" />
-        <p id="erroC" style="color:#FF0000";>
-          Os pontos são colineares
-        </p>
-        
-        <!-- Se desejar coloca dentro lembra de trata caso não for selecionado nada -->
-        <h4 class="fs-P">Selecione o valor de R</h4>
-        <select name="opcoes" id="select">
-          <option value="P1">Os valores de P1</option>
-          <option value="P2">Os valores de P2</option>
-          <option value="P3">Os valores de P3</option>
-          <option value="outro">Outros valores</option>
-        </select>
-       
-        <input type="number" name="Rx" class="hideS numS" placeholder="Distância x" />
-        <input type="number" name="Ry" class="hideS numS" placeholder="Distância y" />
-        <input type="number" name="Rz" class="hideS numS" placeholder="Distância z" />
-        
-        <p id="erroCC" style="color:#FF0000";>
-          O ponto não faz parte do plano
-        </p>
-        
-        <br>
-        
-        <button type="button" name="previous" class="previous action-button">Voltar</button>
-        <button type="button" name="next"  class="next action-button fieldset2" disabled>Próximo</button>
-		<button type="button" name="nextS2" class="action-button">Gerar</button>
-      </div>
-      <div class="especial etapa3">
-        <h2 class="fs-title">Criando a Cena</h2>
-        <h3 class="fs-subtitle">Selecione os dados do objeto</h3>
-        <input type="number" name="numV" placeholder="Número de Vértices" />
-        <div class="hidden inpV"></div>
-        
-				<h4 class="fs-P">Número de Superfícies</h4>
-        <input type="number" name="numSL" placeholder="Número de Superfícies" />
-				<div class="hidden inpS"></div>
-        
-        <button type="button" name="previous" class="previous action-button">Voltar</button>
-        <button type="button" name="submit" disabled class="submit action-button">Gerar</button>
-		<button type="button" name="nextS2" class="action-button">Gerar</button>
-      </div>
+        <!-- progressbar -->
+        <ul id="progressbar">
+            <li class="active">Ponto de Vista</li>
+            <li>Plano de Projeção</li>
+            <li>Dados do Objeto</li>
+        </ul>
+        <!-- fieldsets -->
+        <div class="especial etapa1">
+            <h2 class="fs-title">Criando a Cena</h2>
+            <h3 class="fs-subtitle">Selecione o ponto de vista</h3>
+            <input type="number" name="x" class="numF" placeholder="Distância x" />
+            <input type="number" name="y" class="numF" placeholder="Distância y" />
+            <input type="number" name="z" class="numF" placeholder="Distância z" />
+            <button type="button" name="next" disabled class="next fieldset1 action-button">Próximo</button>
+            <button type="button" name="nextS1" class="action-button">Gerar</button>
+        </div>
+        <div class="especial etapa2">
+            <h2 class="fs-title">Criando a Cena</h2>
+            <h3 class="fs-subtitle">Selecione o plano de projeção</h3>
+            <h4 class="fs-P">Valores de P1</h4>
+            <input type="number" name="P1x" class="numS" placeholder="Distância x" />
+            <input type="number" name="P1y" class="numS" placeholder="Distância y" />
+            <input type="number" name="P1z" class="numS" placeholder="Distância z" />
+            <h4 class="fs-P">Valores de P2</h4>
+            <input type="number" name="P2x" class="numS" placeholder="Distância x" />
+            <input type="number" name="P2y" class="numS" placeholder="Distância y" />
+            <input type="number" name="P2z" class="numS" placeholder="Distância z" />
+            <h4 class="fs-P">Valores de P3</h4>
+            <input type="number" name="P3x" class="numS" placeholder="Distância x" />
+            <input type="number" name="P3y" class="numS" placeholder="Distância y" />
+            <input type="number" name="P3z" class="numS" placeholder="Distância z" />
+            <p id="erroC" style="color:#FF0000" ;>
+                Os pontos são colineares
+            </p>
+
+            <!-- Se desejar coloca dentro lembra de trata caso não for selecionado nada -->
+            <h4 class="fs-P">Selecione o valor de R</h4>
+            <select name="opcoes" id="select">
+                <option value="P1">Os valores de P1</option>
+                <option value="P2">Os valores de P2</option>
+                <option value="P3">Os valores de P3</option>
+                <option value="outro">Outros valores</option>
+            </select>
+
+            <input type="number" name="Rx" class="hideS numS" placeholder="Distância x" />
+            <input type="number" name="Ry" class="hideS numS" placeholder="Distância y" />
+            <input type="number" name="Rz" class="hideS numS" placeholder="Distância z" />
+
+            <p id="erroCC" style="color:#FF0000" ;>
+                O ponto não faz parte do plano
+            </p>
+
+            <br>
+
+            <button type="button" name="previous" class="previous action-button">Voltar</button>
+            <button type="button" name="next" class="next action-button fieldset2" disabled>Próximo</button>
+            <button type="button" name="nextS2" class="action-button">Gerar</button>
+        </div>
+        <div class="especial etapa3">
+            <h2 class="fs-title">Criando a Cena</h2>
+            <h3 class="fs-subtitle">Selecione os dados do objeto</h3>
+            <input type="number" name="numV" placeholder="Número de Vértices" />
+            <div class="hidden inpV"></div>
+
+            <h4 class="fs-P">Número de Superfícies</h4>
+            <input type="number" name="numSL" placeholder="Número de Superfícies" />
+            <div class="hidden inpS"></div>
+
+            <button type="button" name="previous" class="previous action-button">Voltar</button>
+            <button type="button" name="submit" disabled class="submit action-button">Gerar</button>
+            <button type="button" name="nextS2" class="action-button">Gerar</button>
+        </div>
     </form>
 
-    <canvas id= "canvas" width="1230.7692307692307692307692307692‬" height="692,30769230769230769230769230769">
 
-    </canvas>
+	
+    <canvas id="canvas" width="1230.7692307692307692307692307692‬" height="692,30769230769230769230769230769"></canvas>
 
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
 
-<script  src="./script.js"></script>
+    <script src="./script.js"></script>
 
-  </body>
+</body>
 
 </html>
