@@ -1,3 +1,24 @@
+  let current_fs, next_fs, previous_fs;
+  let left, opacity, scale;
+  let animating;
+  let tamVL = 0;
+  let tamSL = 0;
+  let ab=true,bc=true,cd=true,de=true;
+  //definir qual prefere começa
+  let cilindrica = true;
+  let pR;
+  let pPlano1;
+  let pPlano2;
+  let pPlano3;
+  let centro;
+  let objeto;
+  let vertices;
+  let superficies;
+  let pontoDeVista
+  $("#canvas").hide();
+  $("#erroC").hide();
+  $(".hideS").hide();
+  $("#erroCC").hide();
 
 function desenhaPonto(ponto){
   var pointSize = 3; // Change according to the size of the point.
@@ -35,10 +56,10 @@ $("#canvas").click(function(e){
   getPosition(e)
 }) */
 
-function calculaNormal(ponto1, ponto2, ponto3){
-    let nx= ((ponto1.y - ponto2.y) * (ponto3.z - ponto2.z)) - ((ponto3.y - ponto2.y) * (ponto1.z - ponto2.z));
-    let ny= -1 * ((ponto1.x - ponto2.x) * (ponto3.z - ponto2.z)) - ((ponto3.x - ponto2.x) * (ponto1.z - ponto2.z));
-    let nz= ((ponto1.x - ponto2.x) * (ponto3.y - ponto2.y)) - ((ponto3.x - ponto2.x) * (ponto1.y - ponto2.y));
+function calculaNormal(){
+    let nx= ((pPlano1.y - pPlano2.y) * (pPlano3.z - pPlano2.z)) - ((pPlano3.y - pPlano2.y) * (pPlano1.z - pPlano2.z));
+    let ny= -1 * ((pPlano1.x - pPlano2.x) * (pPlano3.z - pPlano2.z)) - ((pPlano3.x - pPlano2.x) * (pPlano1.z - pPlano2.z));
+    let nz= ((pPlano1.x - pPlano2.x) * (pPlano3.y - pPlano2.y)) - ((pPlano3.x - pPlano2.x) * (pPlano1.y - pPlano2.y));
     return {
       x: nx,
       y: ny,
@@ -46,8 +67,8 @@ function calculaNormal(ponto1, ponto2, ponto3){
     }
   }
 
-  function calculaDs(ponto, normal, centro) {
-    let d0 = ponto.x * normal.x + ponto.y * normal.y + ponto.z * normal.z;
+  function calculaDs(normal, centro) {
+    let d0 = pR.x * normal.x + pR.y * normal.y + pR.z * normal.z;
     let d1 = centro.x * normal.x + centro.y * normal.y + centro.z * normal.z;
     let d = d0 - d1;
     return {
@@ -114,9 +135,9 @@ function calculaNormal(ponto1, ponto2, ponto3){
     return matrizFinal
   }
 
-  function mostrar(cilindrica, pPlano1, pPlano2, pPlano3, centro, objeto){
-    let normal= calculaNormal(pPlano1, pPlano2, pPlano3);
-    let ds= calculaDs(pPlano1, normal, centro);
+  function mostrar(cilindrica, centro, objeto){
+    let normal= calculaNormal();
+    let ds= calculaDs(pR, normal, centro);
     let mp;
     if(cilindrica){
       mp= montaMatrizPerspectivaCilindro(normal, centro, ds);
@@ -132,34 +153,79 @@ function calculaNormal(ponto1, ponto2, ponto3){
       }
     }
   }
-
-  let current_fs, next_fs, previous_fs;
-  let left, opacity, scale;
-  let animating;
-  let fi = true;
-  let tamVL = 0;
-  let tamSL = 0;
-  let ab=true,bc=true,cd=true,de=true;
-  let cilindrica;
-  let pPlano1;
-  let pPlano2;
-  let pPlano3;
-  let centro;
-  let objeto;
+  
+  //coloca valor nas variaveis do plano
+  function putValuePontoPlano(){
+	pPlano1 = {'x': $('[name=P1x]').val(),
+			   'y': $('[name=P1y]').val(),
+			   'z': $('[name=P1z]').val()}
+	pPlano2 = {'x': $('[name=P2x]').val(),
+			   'y': $('[name=P2y]').val(),
+			   'z': $('[name=P2z]').val()}
+	pPlano3 = {'x': $('[name=P3x]').val(),
+			   'y': $('[name=P3y]').val(),
+			   'z': $('[name=P3z]').val()}
+		
+	var valor = $("#select option:selected").val();
+	if(valor == "outro"){
+	pR = {'x': $('[name=Rx]').val(),
+		  'y': $('[name=Ry]').val(),
+		  'z': $('[name=Rz]').val()}
+	} else{
+	pR = {'x': $("[name="+valor+"x]").val(),
+		  'y': $("[name="+valor+"y]").val(),
+		  'z': $("[name="+valor+"z]").val()}
+	
+	}
+  }
+  
+  function Vertice(x, y, z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+}
+  
+  function Superficie(vertices) {
+    this.vertices = vertices;
+}
+  
+  //coloca valor nos campos vertices e superficies
+  function putValueVerticesAndSuperficies(){
+	vertices = [];
+	tam = $('[name=numV]').val();
+	var i = 1;
+	$(".justAuxCatchVertice").each( function(){
+		vertices.push(new Vertice($("[name=x"+i+"]").val(),$("[name=y"+i+"]").val(),$("[name=z"+i+"]").val()));
+		i++;
+	});
+	
+	i = 1;
+	
+	superficies = [];
+	$(".justAuxCatchSuperficie").each( function(){
+		var vertices2 = []
+		var j = 1;
+		$(".justAuxCatchSuperficie"+i).each( function(){
+			vertices2.push($("#verticeS"+i+j+" option:selected").val());
+			j++;
+		});
+		i++;
+		superficies.push(vertices2);
+	});
+  }
+  
+  function putValuePontoDeVista(){
+	pontoDeVista = {'x': $('[name=x]').val(),
+					'y': $('[name=y]').val(),
+					'z': $('[name=z]').val()}
+  }
+  
   
   
   //animação para o proximo fieldset
   $(".next").click(function() {
     if (animating) return false;
     animating = true;
-      
-    if(fi==true){
-        $("#erroC").hide();
-      $(".hideS").hide();
-      $("#erroCC").hide();
-      fi = false;
-      $(".submit").attr("disabled", true);
-    }
   
     current_fs = $(this).parent();
     next_fs = $(this).parent().next();
@@ -232,11 +298,6 @@ function calculaNormal(ponto1, ponto2, ponto3){
   
   
   
-  //
-  
-  //
-  
-  
   //valida o primeiro fieldset
   $(".numF").on("input",function() {
     if($('[name=x]').val() == "" || $('[name=y]').val() == "" || $('[name=z]').val() == ""){
@@ -268,7 +329,7 @@ function calculaNormal(ponto1, ponto2, ponto3){
     if(P1x == "" || P1y == "" || P1z == "" || P2x == "" || P2y == "" || P2z == "" || P3x == "" || P3y == "" || P3z == ""){
           $(".fieldset2").attr("disabled", true);
     }
-    else if(P1x*P2y*P3z + P1y*P2z*P3x + P1z*P2x*P3y - P1y*P2x*P3z -P1x*P2z*P3y - P1z*P2y*P3x == 0 ) {
+    else if((P1x - P2x)*(P1y - P3y) == (P1y - P2y)*(P1x - P3x) || (P1x - P2x)*(P1z - P3z) == (P1z - P2z)*(P1x - P3x) || (P1y - P2y)*(P1z - P3z) == (P1z - P2z)*(P1y - P3y)) {
         $(".fieldset2").attr("disabled", true);
       $("#erroC").show();
     }
@@ -296,7 +357,7 @@ function calculaNormal(ponto1, ponto2, ponto3){
           $(".fieldset2").attr("disabled", true);
       block = true;
     }
-    else if(P1x*P2y*P3z + P1y*P2z*P3x + P1z*P2x*P3y - P1y*P2x*P3z -P1x*P2z*P3y - P1z*P2y*P3x == 0 ) {
+    else if((P1x - P2x)*(P1y - P3y) == (P1y - P2y)*(P1x - P3x) || (P1x - P2x)*(P1z - P3z) == (P1z - P2z)*(P1x - P3x) || (P1y - P2y)*(P1z - P3z) == (P1z - P2z)*(P1y - P3y)) {
         $(".fieldset2").attr("disabled", true);
       $("#erroC").show();
     }else{
@@ -334,9 +395,6 @@ function calculaNormal(ponto1, ponto2, ponto3){
         $(".fieldset2").attr("disabled", false);
       $("#erroCC").hide();
     }
-    pPonto1= {x: P1x, y: P1y, z: P1z}
-    pPonto2= {x: P2x, y: P2y, z: P2z}
-    pPonto1= {x: P3x, y: P3y, z: P3z}
     }
   });
   
@@ -477,8 +535,8 @@ function calculaNormal(ponto1, ponto2, ponto3){
   
   var insertInputVetice = function(i,num){
   return (
-              "<div name='V"+i+num+"'>"+
-          "<select name='verticeS' />"+
+              "<div class='justAuxCatchSuperficie"+i+"' name='V"+i+num+"'>"+
+          "<select name='verticeS' id='verticeS"+i+num+"' />"+
                   "</div>");
   }
   
@@ -486,13 +544,13 @@ function calculaNormal(ponto1, ponto2, ponto3){
   return (
               "<div name='s"+num+"'>"+
               "<h4 class='fs-P'>Superficie "+num+"</h4>"+
-          "<input type='number' name='Superficie"+num+"' class='numLS' placeholder='Número de Vertices na Superficie "+num+"' />"+"<div class='hidden inpS"+num+"'></div>"+
+          "<input type='number' name='Superficie"+num+"' class='numLS justAuxCatchSuperficie' placeholder='Número de Vertices na Superficie "+num+"' />"+"<div class='hidden inpS"+num+"'></div>"+
                   "</div>");
   }
   
   var insertInputVertice = function(num) {
         return (
-              "<div name='p"+num+"'>"+
+              "<div class='justAuxCatchVertice' name='p"+num+"'>"+
               "<h4 class='fs-P'>Valores do vertice "+num+"</h4>"+
           "<input type='number' name='x"+num+"' class='numLV' placeholder='Distância x' />"+
           "<input type='number' name='y"+num+"' class='numLV' placeholder='Distância y' />"+
@@ -510,7 +568,10 @@ function calculaNormal(ponto1, ponto2, ponto3){
   
   //botao de submit
   $(".submit").click(function() {
-      alert( "Tudo Ok" );
+      putValuePontoDeVista()
+	  putValuePontoPlano();
+	  putValueVerticesAndSuperficies();
+	  $("#msform").hide();
+	  $("#canvas").show();
       mostrar();
-    return false;
   })
