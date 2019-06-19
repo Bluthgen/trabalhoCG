@@ -13,7 +13,10 @@
   let pPlano1;
   let pPlano2;
   let pPlano3;
-  let centro;
+  let centro = {'x': 0,
+				'y': 0,
+				'z': 0
+  };
   let objeto;
   let vertices;
   let superficies;
