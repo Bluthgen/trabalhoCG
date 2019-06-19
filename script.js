@@ -650,8 +650,8 @@
       $(".submit").hide();
 	  $(".list").hide();
 	  $("form").css("margin", "0 auto");
-	  $("#canvas").css('width', window.innerWidth);
-	  $("#canvas").css('height', window.innerHeight);
+	  $("#canvas").css('width', window.innerWidth - 250);
+	  $("#canvas").css('height', window.innerHeight - 50);
 	  $(".menu").show();
       $("#canvas").show();
       mostrar();

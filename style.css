@@ -214,7 +214,8 @@ select,
 }
 
 canvas {
-	margin-left: 200px;
+	margin-left: 225px;
+	margin-top: 25px;
     border: 1px solid #b18383;
     background-color: black;
 }
