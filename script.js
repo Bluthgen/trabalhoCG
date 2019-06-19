@@ -26,6 +26,7 @@
   $("[name=nextS2]").hide();
   $("[name=nextS3]").hide();
   $(".menu").hide();
+  $("[name=sTipoDeProjecao] option")[1].selected = true;
 
   function desenhaPonto(ponto) {
       var pointSize = 3; // Change according to the size of the point.
@@ -645,7 +646,9 @@
       $(".previous").hide();
       $(".submit").hide();
 	  $(".list").hide();
-	  $("form").css("margin", "0 auto")
+	  $("form").css("margin", "0 auto");
+	  $("#canvas").css('width', window.innerWidth);
+	  $("#canvas").css('height', window.innerHeight);
 	  $(".menu").show();
       $("#canvas").show();
       mostrar();
@@ -677,7 +680,7 @@
           opacity: 100
       }, {
           step: function(now, mx) {
-              $(".etapa1").css({
+              $(".etapa2").css({
                   'transform': 'scale(' + scale + ')',
                   'opacity': opacity
               });
@@ -694,7 +697,7 @@
           opacity: 100
       }, {
           step: function(now, mx) {
-              $(".etapa1").css({
+              $(".etapa3").css({
                   'transform': 'scale(' + scale + ')',
                   'opacity': opacity
               });
@@ -705,6 +708,8 @@
 
   $("[name=nextS1]").click(function() {
       putValuePontoDeVista()
+	  $("form").css("margin", "0 auto");
+	$(".menu").show();
       $(".especial").hide();
       $("#canvas").show();
       mostrar();
@@ -712,6 +717,8 @@
 
   $("[name=nextS2]").click(function() {
       putValuePontoPlano();
+	  $("form").css("margin", "0 auto");
+	$(".menu").show();
       $(".especial").hide();
       $("#canvas").show();
       mostrar();
@@ -719,7 +726,36 @@
 
   $("[name=nextS3]").click(function() {
       putValueVerticesAndSuperficies();
+	  $("form").css("margin", "0 auto");
+	$(".menu").show();
       $(".especial").hide();
       $("#canvas").show();
       mostrar();
+  });
+  
+  $("[name=sDadosCena]").change(function() {
+	var valor = $(this).val();
+	if(valor != ""){
+		$("#canvas").hide();
+		$(".menu").hide();
+		if(valor == 1){
+		mostrarNovamentePrimeiraTela();
+	}
+	else if(valor == 2){
+		mostrarNovamenteSegundaTela();
+	}
+	else if(valor == 3){
+		mostrarNovamenteTerceiraTela();
+	}
+	$("[name=sDadosCena] option")[0].selected = true;
+	}
+  });
+  
+  $("[name=sTipoDeProjecao]").change(function() {
+	if($(this).val() == 1){
+		cilindrica = false;
+	} else{
+		cilindrica = true;
+	}
+	mostrar();
   });
