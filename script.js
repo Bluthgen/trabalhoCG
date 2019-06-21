@@ -51,12 +51,12 @@
 
   /* function getPosition(event){
     var rect = canvas.getBoundingClientRect();
-    var x = event.clientX - rect.left; // x == the location of the click in the document - the location (relative to the left) of the canvas in the document
-    var y = event.clientY - rect.top; // y == the location of the click in the document - the location (relative to the top) of the canvas in the document
+    var x0 = event.clientX - rect.left; // x == the location of the click in the document - the location (relative to the left) of the canvas in the document
+    var y0 = event.clientY - rect.top; // y == the location of the click in the document - the location (relative to the top) of the canvas in the document
 
     // This method will handle the coordinates and will draw them in the canvas.
-    desenhaPonto(x,y);
-    console.log(x, y)
+    desenhaPonto({x: x0,y: y0);
+    console.log(x0, y0)
   }
 
   $("#canvas").click(function(e){
@@ -68,9 +68,9 @@
       let ny = -1 * ((pPlano1.x - pPlano2.x) * (pPlano3.z - pPlano2.z)) - ((pPlano3.x - pPlano2.x) * (pPlano1.z - pPlano2.z));
       let nz = ((pPlano1.x - pPlano2.x) * (pPlano3.y - pPlano2.y)) - ((pPlano3.x - pPlano2.x) * (pPlano1.y - pPlano2.y));
       return {
-          x: nx,
-          y: ny,
-          z: nz
+          x: -1*nx,
+          y: -1*ny,
+          z: -1*nz
       }
   }
 
@@ -122,26 +122,34 @@
 
   function calculoP(mp, objeto, tjv) {
       let ph = multiplyMatrices(mp, objeto);
-      let xc = ph[0][0] / ph[3][0];
-      let yc = ph[1][0] / ph[3][0];
-      let zc = ph[2][0] / ph[3][0];
+      let linhaX= []
+      let linhaY= []
+      let linhaZ= []
+      let linhaW= []
+      for(var i= 0; i<ph[0].length; i++){
+        linhaX.push(ph[0][i] / ph[3][i])
+        linhaY.push(ph[1][i] / ph[3][i])
+        linhaZ.push(ph[2][i] / ph[3][i])
+        linhaW.push(1)
+      }
       let wc = 1;
-      let temp = [
-          [xc],
-          [yc],
-          [zc]
-      ];
-      return multiplyMatrices(tjv, temp);
+      let P = [linhaX, linhaY, linhaZ, linhaW];
+      return multiplyMatrices(tjv, P);
   }
 
   function janelaViewport(janela, viewport) {
       let Sx = (viewport.umax - viewport.umin) / (janela.xmax - janela.xmin);
       let Sy = (viewport.vmax - viewport.vmin) / (janela.ymax - janela.ymin);
-      let matrizparcial = [
-          [Sx, 0, viewport.umin - Sx * janela.xmin],
-          [0, -1 * Sy, viewport.vmin - Sy * janela.ymin],
-          [0, 0, 1]
-      ];
+      //let matrizparcial = [
+      //    [Sx, 0, -1 * Sx * janela.xmin],
+      //    [0, Sy, -1 * Sy * janela.ymin],
+      //    [0, 0, 1]
+      //];
+      let matrizNaoCentralizada= multiplyMatrices([[1, 0, viewport.umin], [0, 1, viewport.vmin], [0,0,1]],
+          multiplyMatrices([[Sx, 0, 0], [0, Sy, 0], [0,0,1]],
+              multiplyMatrices(
+                [[1, 0, -1*janela.xmin], [0, -1, -1*janela.ymin],[0,0,1]],
+                [[1, 0, 0],[0, -1, 0], [0, 0, 1]])));
 
       rj = (janela.xmax - janela.xmin) / (janela.ymax - janela.ymin);
       rv = (viewport.umax - viewport.umin) / (viewport.vmax - viewport.vmin);
@@ -149,23 +157,25 @@
       let matrizFinal;
       if (rj > rv) {
           let vmaxnovo = (viewport.umax - viewport.umin) / rj + viewport.vmin;
+          //console.log(viewport.vmax, vmaxnovo)
           let mat1 = [
               [1, 0, 0],
-              [0, 1, (viewport.vmax - vmaxnovo) / 2],
+              [0, 1, -1 * (viewport.vmax - vmaxnovo) / 2],
               [0, 0, 1]
           ];
-          matrizFinal = multiplyMatrices(matrizparcial, mat1);
+          matrizCentralizada = multiplyMatrices(mat1, matrizNaoCentralizada);
       } else {
           let umaxnovo = rj * (viewport.vmax - viewport.vmin) + viewport.umin;
+          //console.log(viewport.umax, umaxnovo)
           let mat1 = [
-              [1, 0, viewport.umax - umaxnovo],
+              [1, 0, -1 * (viewport.umax - umaxnovo)/2],
               [0, 1, 0],
               [0, 0, 1]
           ];
-          matrizFinal = multiplyMatrices(matrizparcial, mat1);
+          matrizCentralizada = multiplyMatrices(mat1, matrizNaoCentralizada);
       }
 
-      return matrizFinal
+      return matrizCentralizada;
   }
 
   function mostrar() {
@@ -202,10 +212,9 @@
           //vmax: canvas.height
       })
       let p = calculoP(mp, vertices, tjv);
-      for (var i = 0; i < p.length; i++) {
-          for (var j = 0; j < p[i].length; j++) {
-              desenhaPonto(p[i][j])
-          }
+      console.log(p)
+      for (var i = 0; i < p[0].length; i++) {
+          desenhaPonto({x: p[0][i], y: p[1][i]})
       }
   }
 
