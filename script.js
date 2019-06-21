@@ -68,9 +68,9 @@
       let ny = -1 * ((pPlano1.x - pPlano2.x) * (pPlano3.z - pPlano2.z)) - ((pPlano3.x - pPlano2.x) * (pPlano1.z - pPlano2.z));
       let nz = ((pPlano1.x - pPlano2.x) * (pPlano3.y - pPlano2.y)) - ((pPlano3.x - pPlano2.x) * (pPlano1.y - pPlano2.y));
       return {
-          x: -1*nx,
-          y: -1*ny,
-          z: -1*nz
+          x: nx,
+          y: ny,
+          z: nz
       }
   }
 
@@ -99,6 +99,43 @@
       }
       return result;
   }
+  
+  function multiplyMatricesJanela(m1, m2) {
+      var result = [];
+      for (var i = 0; i < 2; i++) {
+          result[i] = [];
+          for (var j = 0; j < m2[0].length; j++) {
+              var sum = 0;
+              for (var k = 0; k < m1[0].length; k++) {
+                  sum += m1[i][k] * m2[k][j];
+              }
+              result[i][j] = sum;
+          }
+      }
+      return result;
+  }
+  
+  function multiplyMatricesV(m1, m2) {
+      var result = [];
+      for (var i = 0; i < m1.length; i++) {
+          result[i] = [];
+          for (var j = 0; j < m2.length; j++) {
+              var sum = 0;
+              for (var k = 0; k < m1[0].length; k++) {
+				  if(k===0)
+					sum += m1[i][k] * m2[j].x;
+				  else if(k===1)
+					sum += m1[i][k] * m2[j].y;
+				  else if(k===2)
+					sum += m1[i][k] * m2[j].z;
+				  else
+					sum += m1[i][k] * 1;
+              }
+              result[i][j] = sum;
+          }
+      }
+      return result;
+  }
 
   function montaMatrizPerspectivaCone(normal, centro, ds) {
       m = [
@@ -121,20 +158,20 @@
   }
 
   function calculoP(mp, objeto, tjv) {
-      let ph = multiplyMatrices(mp, objeto);
+      let ph = multiplyMatricesV(mp, objeto);
       let linhaX= []
       let linhaY= []
-      let linhaZ= []
+      //let linhaZ= []
       let linhaW= []
       for(var i= 0; i<ph[0].length; i++){
         linhaX.push(ph[0][i] / ph[3][i])
-        linhaY.push(ph[1][i] / ph[3][i])
-        linhaZ.push(ph[2][i] / ph[3][i])
+        linhaY.push(-(ph[1][i] / ph[3][i]))
+        //linhaZ.push(ph[2][i] / ph[3][i])
         linhaW.push(1)
       }
-      let wc = 1;
-      let P = [linhaX, linhaY, linhaZ, linhaW];
-      return multiplyMatrices(tjv, P);
+      //let wc = 1;
+      let P = [linhaX, linhaY, linhaW];
+      return multiplyMatricesJanela(tjv, P);
   }
 
   function janelaViewport(janela, viewport) {
@@ -142,15 +179,14 @@
       let Sy = (viewport.vmax - viewport.vmin) / (janela.ymax - janela.ymin);
       //let matrizparcial = [
       //    [Sx, 0, -1 * Sx * janela.xmin],
-      //    [0, Sy, -1 * Sy * janela.ymin],
+      //    [0, -Sy, -1 * Sy * janela.ymin],
       //    [0, 0, 1]
       //];
       let matrizNaoCentralizada= multiplyMatrices([[1, 0, viewport.umin], [0, 1, viewport.vmin], [0,0,1]],
           multiplyMatrices([[Sx, 0, 0], [0, Sy, 0], [0,0,1]],
-              multiplyMatrices(
                 [[1, 0, -1*janela.xmin], [0, -1, -1*janela.ymin],[0,0,1]],
-                [[1, 0, 0],[0, -1, 0], [0, 0, 1]])));
-
+                ));
+/*
       rj = (janela.xmax - janela.xmin) / (janela.ymax - janela.ymin);
       rv = (viewport.umax - viewport.umin) / (viewport.vmax - viewport.vmin);
 
@@ -174,8 +210,9 @@
           ];
           matrizCentralizada = multiplyMatrices(mat1, matrizNaoCentralizada);
       }
-
-      return matrizCentralizada;
+*/
+      //return matrizCentralizada;
+	  return matrizNaoCentralizada;
   }
 
   function mostrar() {
