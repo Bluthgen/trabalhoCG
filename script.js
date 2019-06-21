@@ -712,9 +712,13 @@
 	  //Professor
 	  $("#canvas").css('width', 640);
 	  $("#canvas").css('height', 480);
+	  document.getElementById("canvas").width = 640;
+	  document.getElementById("canvas").height = 480;
 	  //Charles
 	  //$("#canvas").css('width', window.innerWidth - 250);
 	  //$("#canvas").css('height', window.innerHeight - 50);
+	  //document.getElementById("canvas").width = window.innerWidth - 250;
+	  //document.getElementById("canvas").height = window.innerHeight - 50;
 	  $(".menu").show();
       $("#canvas").show();
       mostrar();
