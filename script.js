@@ -8,19 +8,16 @@
       cd = true,
       de = true;
   //definir qual prefere começa
-  let cilindrica = true;
+  let cilindrica = false;
   let pR;
   let pPlano1;
   let pPlano2;
   let pPlano3;
-  let centro = {'x': 0,
-				'y': 0,
-				'z': 0
-  };
+  let centro;//valor do pontoDeVista
   let objeto;
   let vertices;
   let superficies;
-  let pontoDeVista
+  let pontoDeVista;//inutil
   $("#canvas").hide();
   $("#erroC").hide();
   $(".hideS").hide();
@@ -171,28 +168,40 @@
       return matrizFinal
   }
 
-  function mostrar(cilindrica, centro, objeto) {
+  function mostrar() {
       let normal = calculaNormal();
-      let ds = calculaDs(pR, normal, centro);
+      let ds = calculaDs(normal, centro);
       let mp;
       if (cilindrica) {
           mp = montaMatrizPerspectivaCilindro(normal, centro, ds);
       } else {
           mp = montaMatrizPerspectivaCone(normal, centro, ds);
       }
-      let canvas = document.getElementById("canvas")
+      let canvas = document.getElementById("canvas");
       let tjv = janelaViewport({
-          xmin: 0,
-          xmax: 1000,
-          ymin: 0,
-          ymax: 600
+		  //Professor
+		  xmin: 3,
+          xmax: 5,
+          ymin: 3.6,
+          ymax: 6
+		  //Edu
+          //xmin: 0,
+          //xmax: 1000,
+          //ymin: 0,
+          //ymax: 600
       }, {
-          umin: 0,
-          umax: canvas.width,
+		  //Professor
+		  umin: 0,
+          umax: 640,
           vmin: 0,
-          vmax: canvas.heigth
+          vmax: 480
+		  //Edu
+          //umin: 0,
+          //umax: canvas.width,
+          //vmin: 0,
+          //vmax: canvas.height
       })
-      let p = calculoP(mp, objeto, tjv)
+      let p = calculoP(mp, vertices, tjv);
       for (var i = 0; i < p.length; i++) {
           for (var j = 0; j < p[i].length; j++) {
               desenhaPonto(p[i][j])
@@ -271,7 +280,7 @@
   }
 
   function putValuePontoDeVista() {
-      pontoDeVista = {
+      centro = {
           'x': $('[name=x]').val(),
           'y': $('[name=y]').val(),
           'z': $('[name=z]').val()
@@ -385,7 +394,9 @@
           if (P1x == "" || P1y == "" || P1z == "" || P2x == "" || P2y == "" || P2z == "" || P3x == "" || P3y == "" || P3z == "") {
               $(".fieldset2").attr("disabled", true);
               $("[name=nextS2]").attr("disabled", true);
-          } else if ((P1x - P2x) * (P1y - P3y) == (P1y - P2y) * (P1x - P3x) || (P1x - P2x) * (P1z - P3z) == (P1z - P2z) * (P1x - P3x) || (P1y - P2y) * (P1z - P3z) == (P1z - P2z) * (P1y - P3y)) {
+          } else if (((P1x - P2x) * (P1y - P3y) - (P1y - P2y) * (P1x - P3x)) === 
+					 ((P1y - P2y) * (P1z - P3z) - (P1z - P2z) * (P1y - P3y)) ===
+					 ((P1x - P2x) * (P1z - P3z) - (P1z - P2z) * (P1x - P3x)) === 0) {
               $(".fieldset2").attr("disabled", true);
               $("[name=nextS2]").attr("disabled", true);
               $("#erroC").show();
@@ -413,7 +424,9 @@
           $(".fieldset2").attr("disabled", true);
           $("[name=nextS2]").attr("disabled", true);
           block = true;
-      } else if ((P1x - P2x) * (P1y - P3y) == (P1y - P2y) * (P1x - P3x) || (P1x - P2x) * (P1z - P3z) == (P1z - P2z) * (P1x - P3x) || (P1y - P2y) * (P1z - P3z) == (P1z - P2z) * (P1y - P3y)) {
+      } else if (((P1x - P2x) * (P1y - P3y) - (P1y - P2y) * (P1x - P3x)) === 
+				 ((P1y - P2y) * (P1z - P3z) - (P1z - P2z) * (P1y - P3y)) ===
+				 ((P1x - P2x) * (P1z - P3z) - (P1z - P2z) * (P1x - P3x)) === 0) {
           $(".fieldset2").attr("disabled", true);
           $("[name=nextS2]").attr("disabled", true);
           $("#erroC").show();
@@ -650,8 +663,12 @@
       $(".submit").hide();
 	  $(".list").hide();
 	  $("form").css("margin", "0 auto");
-	  $("#canvas").css('width', window.innerWidth - 250);
-	  $("#canvas").css('height', window.innerHeight - 50);
+	  //Professor
+	  $("#canvas").css('width', 640);
+	  $("#canvas").css('height', 480);
+	  //Charles
+	  //$("#canvas").css('width', window.innerWidth - 250);
+	  //$("#canvas").css('height', window.innerHeight - 50);
 	  $(".menu").show();
       $("#canvas").show();
       mostrar();
