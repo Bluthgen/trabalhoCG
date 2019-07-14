@@ -18,6 +18,7 @@
   let vertices;
   let superficies;
   let pontoDeVista;//inutil
+  let pontosFinais= []
   $("#canvas").hide();
   $("#erroC").hide();
   $(".hideS").hide();
@@ -227,10 +228,10 @@
       let canvas = document.getElementById("canvas");
       let tjv = janelaViewport({
 		  //Professor
-		  xmin: 3,
-          xmax: 5,
-          ymin: 3.6,
-          ymax: 6
+		  xmin: 1.06,
+          xmax: -0.94,
+          ymin: 1.14,
+          ymax: -0.36
 		  //Edu
           //xmin: 0,
           //xmax: 1000,
@@ -239,9 +240,9 @@
       }, {
 		  //Professor
 		  umin: 0,
-          umax: 640,
+          umax: 32,
           vmin: 0,
-          vmax: 480
+          vmax: 24
 		  //Edu
           //umin: 0,
           //umax: canvas.width,
@@ -250,8 +251,16 @@
       })
       let p = calculoP(mp, vertices, tjv);
       console.log(p)
+      
       for (var i = 0; i < p[0].length; i++) {
-          desenhaPonto({x: p[0][i], y: p[1][i]})
+        let pontoTemp= {x: p[0][i], y: p[1][i]}  
+        desenhaPonto(pontoTemp)
+        pontosFinais.push(pontoTemp)
+      }
+      for (var i= 0; i<superficies.length; i++){
+        for (var j= 0; j<superficies[i].length-1; j++){
+            desenhaLinha(pontosFinais[parseInt(superficies[i][j], 10) - 1], pontosFinais[parseInt(superficies[i][j+1], 10) - 1])
+        }
       }
   }
 
