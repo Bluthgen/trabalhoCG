@@ -1,4 +1,4 @@
-  let current_fs, next_fs, previous_fs;
+﻿  let current_fs, next_fs, previous_fs;
   let left, opacity, scale;
   let animating;
   let tamVL = 0;
@@ -718,16 +718,18 @@
       $(".submit").hide();
 	  $(".list").hide();
 	  $("form").css("margin", "0 auto");
-	  //Professor
-	  $("#canvas").css('width', 640);
-	  $("#canvas").css('height', 480);
-	  document.getElementById("canvas").width = 640;
-	  document.getElementById("canvas").height = 480;
-	  //Charles
-	  //$("#canvas").css('width', window.innerWidth - 250);
-	  //$("#canvas").css('height', window.innerHeight - 50);
-	  //document.getElementById("canvas").width = window.innerWidth - 250;
-	  //document.getElementById("canvas").height = window.innerHeight - 50;
+	  //Valor tamanho do dispositivo planilha os 2 proximos fixo o 3 e 4 variavel se os 2 proximos comenta o variavel
+	  //document.getElementById("canvas").width = 640;
+	  //document.getElementById("canvas").height = 480;
+	  document.getElementById("canvas").width = window.innerWidth - 250;
+	  document.getElementById("canvas").height = window.innerHeight - 50;
+
+
+
+
+	  //Valor da imagem esse deixa assim pq pega tela inteira
+	  $("#canvas").css('width', window.innerWidth - 250);
+	  $("#canvas").css('height', window.innerHeight - 50);
 	  $(".menu").show();
       $("#canvas").show();
       mostrar();
