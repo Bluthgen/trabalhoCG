@@ -17,7 +17,6 @@
   let objeto;
   let vertices;
   let superficies;
-  let pontoDeVista;//inutil
   let pontosFinais= []
   $("#canvas").hide();
   $("#erroC").hide();
@@ -159,23 +158,11 @@
   }
 
   function janelaViewport(janela, viewport) {
-      
-    //let matrizparcial = [
-    //    [Sx, 0, -1 * Sx * janela.xmin],
-    //    [0, -Sy, -1 * Sy * janela.ymin],
-    //    [0, 0, 1]
-    //];
-    
-
     rj = (janela.xmax - janela.xmin) / (janela.ymax - janela.ymin);
     rv = (viewport.umax - viewport.umin) / (viewport.vmax - viewport.vmin);
 
-    console.log(rj)
-    console.log(rv)
-    //let matrizFinal;
     if (rj > rv) {
         let vmaxnovo = (viewport.umax - viewport.umin) / rj + viewport.vmin;
-        //console.log(viewport.vmax, vmaxnovo)
         let mat1 = [
             [1, 0, 0],
             [0, 1, (viewport.vmax - vmaxnovo) / 2],
@@ -191,7 +178,6 @@
     } else {
         let umaxnovo = rj * (viewport.vmax - viewport.vmin) + viewport.umin;
         let rv2 = (umaxnovo - viewport.umin) / (viewport.vmax - viewport.vmin);
-        console.log(viewport.umax, umaxnovo, rv2)
         let mat1 = [
             [1, 0, (viewport.umax - umaxnovo)/2],
             [0, 1, 0],
@@ -207,7 +193,6 @@
     }
 
     return matrizCentralizada;
-    //return matrizNaoCentralizada;
 }
 
   function mostrar() {
@@ -232,7 +217,6 @@
           vmax: canvas.height
       })
       let p = calculoP(mp, vertices, tjv);
-      console.log(p)
       
       for (var i = 0; i < p[0].length; i++) {
         let pontoTemp= {x: p[0][i], y: p[1][i]}  
@@ -768,8 +752,30 @@
           easing: 'easeInOutBack'
       });
   }
-
+  
   $(".nextSS").click(function() {
+	  const context = canvas.getContext('2d');
+	  context.clearRect(0, 0, canvas.width, canvas.height);
+	  pR=0;
+	  pPlano1=0;
+	  pPlano2=0;
+	  pPlano3=0;
+	  centro=0;
+	  objeto=0;
+	  vertices=[];
+	  superficies=[];
+	  pontosFinais= []
+      putValuePontoDeVista()
+	  putValuePontoPlano()
+	  putValueVerticesAndSuperficies();
+	  $("form").css("margin", "0 auto");
+	$(".menu").show();
+      $(".especial").hide();
+      $("#canvas").show();
+      mostrar();
+  });
+
+  $(".nextSSS").click(function() {
 	  const context = canvas.getContext('2d');
 	  context.clearRect(0, 0, canvas.width, canvas.height);
 	  if($(this).val() == 1){
@@ -781,11 +787,10 @@
 	  pPlano1=0;
 	  pPlano2=0;
 	  pPlano3=0;
-	  centro=0;//valor do pontoDeVista
+	  centro=0;
 	  objeto=0;
 	  vertices=[];
 	  superficies=[];
-	  pontoDeVista=0;//inutil
 	  pontosFinais= []
       putValuePontoDeVista()
 	  putValuePontoPlano()
