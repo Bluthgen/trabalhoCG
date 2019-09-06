@@ -159,45 +159,56 @@
   }
 
   function janelaViewport(janela, viewport) {
-      let Sx = (viewport.umax - viewport.umin) / (janela.xmax - janela.xmin);
-      let Sy = (viewport.vmax - viewport.vmin) / (janela.ymax - janela.ymin);
-      //let matrizparcial = [
-      //    [Sx, 0, -1 * Sx * janela.xmin],
-      //    [0, -Sy, -1 * Sy * janela.ymin],
-      //    [0, 0, 1]
-      //];
-      let matrizNaoCentralizada= multiplyMatrices([[1, 0, viewport.umin], [0, 1, viewport.vmin], [0,0,1]],
+      
+    //let matrizparcial = [
+    //    [Sx, 0, -1 * Sx * janela.xmin],
+    //    [0, -Sy, -1 * Sy * janela.ymin],
+    //    [0, 0, 1]
+    //];
+    
+
+    rj = (janela.xmax - janela.xmin) / (janela.ymax - janela.ymin);
+    rv = (viewport.umax - viewport.umin) / (viewport.vmax - viewport.vmin);
+
+    console.log(rj)
+    console.log(rv)
+    //let matrizFinal;
+    if (rj > rv) {
+        let vmaxnovo = (viewport.umax - viewport.umin) / rj + viewport.vmin;
+        //console.log(viewport.vmax, vmaxnovo)
+        let mat1 = [
+            [1, 0, 0],
+            [0, 1, (viewport.vmax - vmaxnovo) / 2],
+            [0, 0, 1]
+        ];
+        let Sx = (viewport.umax - viewport.umin) / (janela.xmax - janela.xmin);
+        let Sy = (vmaxnovo - viewport.vmin) / (janela.ymax - janela.ymin);
+        let matrizNaoCentralizada= multiplyMatrices([[1, 0, viewport.umin], [0, 1, viewport.vmin], [0,0,1]],
           multiplyMatrices([[Sx, 0, 0], [0, Sy, 0], [0,0,1]],
                 [[1, 0, -1*janela.xmin], [0, -1, -1*janela.ymin],[0,0,1]],
                 ));
-/*
-      rj = (janela.xmax - janela.xmin) / (janela.ymax - janela.ymin);
-      rv = (viewport.umax - viewport.umin) / (viewport.vmax - viewport.vmin);
+        matrizCentralizada = multiplyMatrices(mat1, matrizNaoCentralizada);
+    } else {
+        let umaxnovo = rj * (viewport.vmax - viewport.vmin) + viewport.umin;
+        let rv2 = (umaxnovo - viewport.umin) / (viewport.vmax - viewport.vmin);
+        console.log(viewport.umax, umaxnovo, rv2)
+        let mat1 = [
+            [1, 0, (viewport.umax - umaxnovo)/2],
+            [0, 1, 0],
+            [0, 0, 1]
+        ];
+        let Sx = (umaxnovo - viewport.umin) / (janela.xmax - janela.xmin);
+        let Sy = (viewport.vmax - viewport.vmin) / (janela.ymax - janela.ymin);
+        let matrizNaoCentralizada= multiplyMatrices([[1, 0, viewport.umin], [0, 1, viewport.vmin], [0,0,1]],
+          multiplyMatrices([[Sx, 0, 0], [0, Sy, 0], [0,0,1]],
+                [[1, 0, -1*janela.xmin], [0, -1, -1*janela.ymin],[0,0,1]],
+                ));
+        matrizCentralizada = multiplyMatrices(mat1, matrizNaoCentralizada);
+    }
 
-      let matrizFinal;
-      if (rj > rv) {
-          let vmaxnovo = (viewport.umax - viewport.umin) / rj + viewport.vmin;
-          //console.log(viewport.vmax, vmaxnovo)
-          let mat1 = [
-              [1, 0, 0],
-              [0, 1, -1 * (viewport.vmax - vmaxnovo) / 2],
-              [0, 0, 1]
-          ];
-          matrizCentralizada = multiplyMatrices(mat1, matrizNaoCentralizada);
-      } else {
-          let umaxnovo = rj * (viewport.vmax - viewport.vmin) + viewport.umin;
-          //console.log(viewport.umax, umaxnovo)
-          let mat1 = [
-              [1, 0, -1 * (viewport.umax - umaxnovo)/2],
-              [0, 1, 0],
-              [0, 0, 1]
-          ];
-          matrizCentralizada = multiplyMatrices(mat1, matrizNaoCentralizada);
-      }
-*/
-      //return matrizCentralizada;
-	  return matrizNaoCentralizada;
-  }
+    return matrizCentralizada;
+    //return matrizNaoCentralizada;
+}
 
   function mostrar() {
       let normal = calculaNormal();
