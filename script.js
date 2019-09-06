@@ -8,7 +8,7 @@
       cd = true,
       de = true;
   //definir qual prefere começa
-  let cilindrica = true;
+  let cilindrica = false;
   let pR;
   let pPlano1;
   let pPlano2;
@@ -230,7 +230,6 @@
       }
       for (var i= 0; i<superficies.length; i++){
         for (var j= 0; j<superficies[i].length-1; j++){
-			console.log("entrei");
             desenhaLinha(pontosFinais[parseInt(superficies[i][j], 10) - 1], pontosFinais[parseInt(superficies[i][j+1], 10) - 1])
         }
       }
@@ -709,8 +708,6 @@
 
   //mostra novamente a primeira tela
   function mostrarNovamentePrimeiraTela() {
-	  const context = canvas.getContext('2d');
-	  context.clearRect(0, 0, canvas.width, canvas.height);
 	  $("form").css("margin", "50px auto")
       $(".etapa1").show();
       $("[name=nextS1]").show();
@@ -728,8 +725,6 @@
   }
 
   function mostrarNovamenteSegundaTela() {
-	  const context = canvas.getContext('2d');
-	  context.clearRect(0, 0, canvas.width, canvas.height);
 	  $("form").css("margin", "50px auto")
       $(".etapa2").show();
       $("[name=nextS2]").show();
@@ -747,8 +742,6 @@
   }
 
   function mostrarNovamenteTerceiraTela() {
-	  const context = canvas.getContext('2d');
-	  context.clearRect(0, 0, canvas.width, canvas.height);
 	  $("form").css("margin", "50px auto")
       $(".etapa3").show();
       $("[name=nextS3]").show();
@@ -765,29 +758,27 @@
       });
   }
 
-  $("[name=nextS1]").click(function() {
-	  centro = null;
+  $(".nextSS").click(function() {
+	  const context = canvas.getContext('2d');
+	  context.clearRect(0, 0, canvas.width, canvas.height);
+	  if($(this).val() == 1){
+		cilindrica = false;
+	} else{
+		cilindrica = true;
+	}
+	  pR=0;
+	  pPlano1=0;
+	  pPlano2=0;
+	  pPlano3=0;
+	  centro=0;//valor do pontoDeVista
+	  objeto=0;
+	  vertices=[];
+	  superficies=[];
+	  pontoDeVista=0;//inutil
+	  pontosFinais= []
       putValuePontoDeVista()
-	  $("form").css("margin", "0 auto");
-	$(".menu").show();
-      $(".especial").hide();
-      $("#canvas").show();
-      mostrar();
-  });
-
-  $("[name=nextS2]").click(function() {
-      putValuePontoPlano();
-	  $("form").css("margin", "0 auto");
-	$(".menu").show();
-      $(".especial").hide();
-      $("#canvas").show();
-      mostrar();
-  });
-
-  $("[name=nextS3]").click(function() {
-	  objeto = null;
-	  vertices = null;
-      putValueVerticesAndSuperficies();
+	  putValuePontoPlano()
+	  putValueVerticesAndSuperficies();
 	  $("form").css("margin", "0 auto");
 	$(".menu").show();
       $(".especial").hide();
@@ -811,14 +802,4 @@
 	}
 	$("[name=sDadosCena] option")[0].selected = true;
 	}
-  });
-  
-  $("[name=sTipoDeProjecao]").click(function() {
-	  console.log($(this).val());
-	if($(this).val() == 1){
-		cilindrica = false;
-	} else{
-		cilindrica = true;
-	}
-	mostrar();
   });
