@@ -50,20 +50,6 @@
       ctx.stroke();
   }
 
-  /* function getPosition(event){
-    var rect = canvas.getBoundingClientRect();
-    var x0 = event.clientX - rect.left; // x == the location of the click in the document - the location (relative to the left) of the canvas in the document
-    var y0 = event.clientY - rect.top; // y == the location of the click in the document - the location (relative to the top) of the canvas in the document
-
-    // This method will handle the coordinates and will draw them in the canvas.
-    desenhaPonto({x: x0,y: y0);
-    console.log(x0, y0)
-  }
-
-  $("#canvas").click(function(e){
-    getPosition(e)
-  }) */
-
   function calculaNormal() {
       let nx = ((pPlano1.y - pPlano2.y) * (pPlano3.z - pPlano2.z)) - ((pPlano3.y - pPlano2.y) * (pPlano1.z - pPlano2.z));
       let ny = -1 * ((pPlano1.x - pPlano2.x) * (pPlano3.z - pPlano2.z)) - ((pPlano3.x - pPlano2.x) * (pPlano1.z - pPlano2.z));
@@ -162,15 +148,12 @@
       let ph = multiplyMatricesV(mp, objeto);
       let linhaX= []
       let linhaY= []
-      //let linhaZ= []
       let linhaW= []
       for(var i= 0; i<ph[0].length; i++){
         linhaX.push(ph[0][i] / ph[3][i])
         linhaY.push(-(ph[1][i] / ph[3][i]))
-        //linhaZ.push(ph[2][i] / ph[3][i])
         linhaW.push(1)
       }
-      //let wc = 1;
       let P = [linhaX, linhaY, linhaW];
       return multiplyMatricesJanela(tjv, P);
   }
@@ -239,15 +222,15 @@
           //ymax: 600
       }, {
 		  //Professor
-		  umin: 0,
-          umax: 32,
-          vmin: 0,
-          vmax: 24
-		  //Edu
-          //umin: 0,
-          //umax: canvas.width,
+		  //umin: 0,
+          //umax: 32,
           //vmin: 0,
-          //vmax: canvas.height
+          //vmax: 24
+		  //Edu
+          umin: 0,
+          umax: canvas.width,
+          vmin: 0,
+          vmax: canvas.height
       })
       let p = calculoP(mp, vertices, tjv);
       console.log(p)
